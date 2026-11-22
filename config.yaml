@@ -1,0 +1,61 @@
+# All regions are [x, y, width, height] as fractions of the frame (0.0 - 1.0),
+# so they keep working if you change capture resolution (same aspect ratio).
+# The values below are PLACEHOLDERS. Run `python calibrate.py` and adjust them
+# until the OCR output printed for each region matches what is on screen.
+
+capture:
+  source: 0            # camera index, or a path to a recorded video file
+  width: 1920
+  height: 1080
+  sample_interval: 1.0 # seconds between analysed frames
+
+debounce: 2            # a state must be seen this many samples in a row
+
+species:
+  file: species.txt
+  min_score: 85        # fuzzy match threshold (0-100)
+
+db: matches.sqlite
+screenshots_dir: screenshots
+
+# States are checked in this order; first one whose keywords appear in the
+# OCR text of its region wins. Keywords are matched lowercase.
+# Write them in the language your game is set to.
+states:
+  - name: win
+    region: [0.25, 0.30, 0.50, 0.25]
+    keywords: ["you won", "victory"]
+  - name: loss
+    region: [0.25, 0.30, 0.50, 0.25]
+    keywords: ["you lost", "defeat"]
+  - name: team_preview
+    region: [0.00, 0.00, 1.00, 0.15]
+    keywords: ["team preview", "choose"]
+  - name: battle
+    region: [0.00, 0.80, 1.00, 0.20]
+    keywords: ["fight", "what will"]
+
+# Where Pokémon names are printed on each screen.
+name_regions:
+  team_preview:
+    mine:
+      - [0.05, 0.20, 0.20, 0.05]
+      - [0.05, 0.30, 0.20, 0.05]
+      - [0.05, 0.40, 0.20, 0.05]
+      - [0.05, 0.50, 0.20, 0.05]
+      - [0.05, 0.60, 0.20, 0.05]
+      - [0.05, 0.70, 0.20, 0.05]
+    opponent:
+      - [0.75, 0.20, 0.20, 0.05]
+      - [0.75, 0.30, 0.20, 0.05]
+      - [0.75, 0.40, 0.20, 0.05]
+      - [0.75, 0.50, 0.20, 0.05]
+      - [0.75, 0.60, 0.20, 0.05]
+      - [0.75, 0.70, 0.20, 0.05]
+  battle:
+    opponent_active:
+      - [0.60, 0.05, 0.20, 0.05]
+      - [0.80, 0.05, 0.20, 0.05]
+    mine_active:
+      - [0.00, 0.60, 0.20, 0.05]
+      - [0.20, 0.60, 0.20, 0.05]
